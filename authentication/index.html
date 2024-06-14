@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyanon Digital | Login</title>
+    <link rel="stylesheet" href="../static/css/main.css">
+    <link rel="stylesheet" href="../static/css/authentication.css">
+    <script src="../static/js/authentication.js"></script>
+    <script src="https://kit.fontawesome.com/bd21c825a1.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-4xl h-3/5">
+
+        <!-- Forms Container -->
+        <div class="relative w-full h-full flex">
+
+            <!-- User Login Form -->
+            <div id="user-login" class="w-1/2 p-8 opacity-100 flex flex-col justify-center">
+                <div class="mb-4">
+                    <img src="../static/images/kyanon-logo-blue.png" alt="Kyanon Logo" class="h-16 w-auto bg-cover resize center" >
+                </div>
+                <h2 class="text-2xl font-bold text-left text-blue-600 mb-6"><span class="underline text-blue-600">Sign</span> in</h2>
+                <form id="user-login-form"
+                    method="post" 
+                    action="">
+
+                    <fieldset class="mb-4">
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" name="username" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition" placeholder="Enter username">
+                        <p id="username-alert" class="mt-2 hidden text-pink-600 text-sm">
+                            Username cannot leave blank.
+                        </p>
+                    </fieldset>
+                    <fieldset class="mb-6">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="password" name="password" class="peer mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-600 focus:text-blue-600 disabled:bg-gray-300 transition" placeholder="********">
+                        <p id="password-alert" class="mt-2 hidden text-pink-600 text-sm">
+                            Password cannot leave blank.
+                        </p>
+                    </fieldset>
+
+                    <div>
+                        <button id="sign-in" type="submit" class="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:bg-blue-400 focus:outline-none transition">Sign in</button>
+                        <div id="sign-in-alert" class="flex gap-3 hidden justify-around items-center mt-3 p-4 bg-red-100 text-red-700 rounded-md">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span id="sign-in-alert-text">Something went wrong. Please try again later.</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full bg-gray-200 flex justify-center items-center h-0.5 mt-7 mb-7">
+                        <p class="flex bg-white text-center text-gray-400 text-sm w-max px-2">Don't have an account?</p>
+                    </div>
+
+                    <button type="button" id="back-to-signup-form" class="w-full py-2 px-4 bg-white text-blue-600 border font-medium rounded-md hover:bg-blue-600 hover:text-white focus:outline-none transition">Sign up</button>
+                </form>
+            </div>
+
+            <!-- User Sign Up Form -->
+            <div id="user-signup" class="w-1/2 p-8 opacity-100">
+                <h2 class="text-2xl font-bold text-left text-blue-600 mb-6"><span class="underline text-blue-600">Sign</span> up</h2>
+                <form id="user-signup-form">
+                    <fieldset class="mb-3">
+                        <label for="name-signup" class="block text-sm font-medium text-gray-700">Full name</label>
+                        <input type="text" pattern="[a-zA-Z\s]{1,25}" id="name-signup" name="name-signup" class="peer invalid:border-pink-500 invalid:text-pink-600
+                        focus:invalid:border-pink-500 focus:invalid:ring-pink-500 mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-600 disabled:bg-gray-300 transition" placeholder="Enter full name">
+                        <p id="name-signup-alert" class="mt-2 hidden peer-invalid:block text-pink-600 text-sm">
+                            Max 25 characters (a-z, A-Z, spaces) are allowed.
+                        </p>
+                    </fieldset>
+                    <fieldset class="mb-3 flex">
+                        <div class="w-1/2 flex-1">
+                            <label for="username-signup" class="block text-sm font-medium text-gray-700">Username</label>
+                            <input type="text" pattern="[a-zA-Z0-9]{1,20}" id="username-signup" name="username-signup" class="peer invalid:border-pink-500 invalid:text-pink-600
+                            focus:invalid:border-pink-500 focus:invalid:ring-pink-500 mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-600 disabled:bg-gray-300 transition" placeholder="Enter username">
+                            <p id="username-signup-alert" class="mt-2 hidden peer-invalid:block text-pink-600 text-sm">
+                                Max 20 characters (a-z, A-Z, 0-9) are allowed. No whitespace.
+                            </p>
+                        </div>
+                        <div class="w-1/2 flex-1 ml-3">
+                            <label for="nature-signup" class="block text-sm font-medium text-gray-700">Nature</label>
+                            <select name="nature-signup" id="nature-signup" class="block w-full mt-1 px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-600 disabled:bg-gray-300 transition">
+                                <option value="individual">Individual</option>
+                                <option value="organization">Organization</option>
+                                <option value="government">Government</option>
+                            </select>
+                            <p id="nature-signup-alert" class="mt-2 hidden peer-invalid:block text-pink-600 text-sm">
+                                A nature must be selected.
+                            </p>
+                        </div>
+                        
+                    </fieldset>
+                    <fieldset class="mb-3">
+                        <label for="password-signup" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" pattern=".{8,}" id="password-signup" name="password-signup" class="peer invalid:border-pink-500 invalid:text-pink-600
+                        focus:invalid:border-pink-500 focus:invalid:ring-pink-500 mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-600 disabled:bg-gray-300 transition" placeholder="********">
+                        <p id="password-signup-alert" class="mt-2 hidden peer-invalid:block text-pink-600 text-sm">
+                           The password must have at least 8 characters.
+                        </p>
+                    </fieldset>
+                    <fieldset class="mb-3">
+                        <label for="password-confirm-signup" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                        <input type="password" pattern=".{8,}" id="password-confirm-signup" name="password-confirm-signup" class="peer invalid:border-pink-500 invalid:text-pink-600
+                        focus:invalid:border-pink-500 focus:invalid:ring-pink-500 mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-600 disabled:bg-gray-300 transition" placeholder="********">
+                        <p id="password-confirm-signup-alert" class="mt-2 hidden peer-invalid:block text-pink-600 text-sm">
+                           The confirm password must have at least 8 characters.
+                        </p>
+                    </fieldset>
+                    <div class="mt-5">
+                        <input id="accept-policy" name="accept-policy" type="checkbox" class="border border-gray-400">
+                        <label for="accept-policy">
+                            I accept the <a href="#" class="text-blue-600text-blue-600 font-semibold">Terms of Use</a>
+                            & <a href="#" class="text-blue-600 font-semibold">Privacy Policy.</a>
+                        </label>
+                        <p id="accept-policy-alert" class="mt-2 hidden peer-invalid:block text-pink-600 text-sm">
+                            You must agree with the ToF and the privacy policy.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+
+                        <div>
+                            <button id="signup-button"
+                                class="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none transition">Register
+                            </button>
+                            <div id="sign-up-alert" class="flex gap-3 hidden justify-around items-center mt-3 p-4 bg-red-100 text-red-700 rounded-md">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span id="sign-up-alert-text">Something went wrong. Please try again later.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full bg-gray-200 flex justify-center items-center h-0.5 mt-7 mb-7">
+                            <p class="flex bg-white text-center text-gray-400 text-sm w-max px-2">Already have an account?</p>
+                        </div>
+                        <button type="button" id="back-to-signin-form" class="w-full py-2 px-4 bg-white text-blue-600 border font-medium rounded-md hover:bg-blue-600 hover:text-white focus:outline-none transition">Sign in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Overlay Container -->
+        <div id="overlay-container" class="absolute top-0 left-1/2 w-full h-full z-10 bg-gradient-to-r bg-blue-600 overflow-hidden transition-transform duration-1000 ease-in-out">
+            <div class="relative w-full h-full">
+                <!-- Overlay Panel And Image -->
+                <div class="absolute inset-y-0 left-0 w-1/2" style="background-image: url('../static/images/placeholder.avif') !important; background-size: cover; background-position: center; background-repeat: no-repeat;">
+                    <div class="overlay-panel" >
+                        
+                    </div>
+                </div>
+                <div class="absolute inset-y-0 right-0 w-1/2 flex items-center justify-center px-8">
+                    <div class="overlay-panel text-center">
+                        <div class="flex justify-center items-center mb-4">
+                            <h2 class="text-3xl font-bold text-white">Welcome to </h2>
+                            <img src="../static/images/kyanon-logo-white.png" alt="Kyanon Logo" class="h-12 ml-3" />
+                            </div>
+                        <p class="mb-4 text-white">Your trusted partner in real estate. Explore our listings to find your dream home today.</p>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
