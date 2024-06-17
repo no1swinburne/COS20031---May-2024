@@ -1,11 +1,3 @@
-const addClass = (element, ...classes) => {
-    element.classList.add(...classes);
-};
-
-const removeClass = (element, ...classes) => {
-    element.classList.remove(...classes);
-};
-
 function modifyAlertMessage(status, input, message) {
     let alertElement = input.nextElementSibling;
     if(input.type === "checkbox") {

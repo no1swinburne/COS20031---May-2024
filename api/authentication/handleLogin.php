@@ -4,6 +4,8 @@
 
     header('Content-Type: application/json');
 
+    session_start();
+
     // Sanitise input from users
     function sanitizeInput($input, $conn) {
         if (isset($_POST[$input])) {

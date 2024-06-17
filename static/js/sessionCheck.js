@@ -15,5 +15,6 @@ async function checkLoginSession(api = "../api/authentication/checkSession.php")
 
     } catch (error) {
         return false;
-    }
+    } 
+    return false;
 }
