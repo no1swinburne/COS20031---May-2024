@@ -111,7 +111,16 @@ window.onload = async function() {
         window.location = "../authentication";
     }
 
+    initForm();
+    
+    initPropertyDetailsInputChangeStatus();
+    handleDisplayForm();
+
+    console.log("truong to init form");
+
     getPropertiesList();
+
+    console.log("truong to get prop form");
 
     const getMoreBtn = document.getElementById(`properties-list-see-more`);
     const tryAgainBtn = document.getElementById(`properties-list-try-again`);
@@ -121,6 +130,7 @@ window.onload = async function() {
     const forRentRadio = document.getElementById(`forRent`);
 
     getMoreBtn.addEventListener('click', async function() {
+
         getPropertiesList();
     });
 
@@ -130,6 +140,7 @@ window.onload = async function() {
 
     [owningRadio, rentingRadio, forRentRadio].forEach(function(radio) {
         radio.addEventListener('change', async function() {
+            console.log("truong to get prop form");
             if(radio.checked == true) {
                 offset = 0;
                 mode = radio.id;
@@ -137,5 +148,7 @@ window.onload = async function() {
             }
         })
     });
+
+    // loadProperties();
     
 };

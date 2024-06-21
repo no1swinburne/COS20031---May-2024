@@ -1,0 +1,29 @@
+html {
+  overflow-y: overlay;
+  scrollbar-gutter: stable;
+}
+
+.blur-background {
+  filter: blur(4px);
+}
+
+.checkbox-button input[type="checkbox"] {
+  display: none;
+}
+
+.transform {
+  top: -100%;
+  opacity: 0;
+  transform: scale(1.25);
+}
+
+.transform-active {
+  top: 25%;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.transition-transform {
+  transition: top 200ms ease-in-out, opacity 200ms ease-in-out,
+    transform 200ms ease-in-out;
+}

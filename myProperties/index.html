@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stylesheet" href="../static/css/authentication.css">
     <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/myProperties.css">
     <script src="../static/js/htmlInteract.js"></script>
     <script src="../static/js/sessionCheck.js"></script>
+    <script src="../static/js/newProperty.js"></script>
     <script src="../static/js/propertiesList.js"></script>
     <script src="https://kit.fontawesome.com/bd21c825a1.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body >
     <!-- Header -->
     <header class="relative w-full">
         <div class="w-40 absolute mt-3 top-0 left-1/2 -ml-24 lg:-ml-40">
@@ -41,27 +43,27 @@
 
     <!-- Main Content -->
 
-    <div class="flex justify-center mt-12">
-        <div class="w-3/4">
+    <div class="z-40 flex justify-center mt-12">
+        <div id="main" class="w-3/4">
             <h1 class="text-5xl font-black">my<span class="text-blue-600">Properties</span></h1>
 
             <div class="flex mt-8 items-center justify-between">
                 <fieldset class="flex gap-4">
-                    <label for="owning" class="cursor-pointer py-3 px-8 text-gray-600 rounded-full border-gray-300 text-xl border-2 has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:bg-blue-200 has-[:checked]:border-blue-300 active:opacity-20 transition ">
+                    <label for="owning" class="cursor-pointer py-3 px-8 text-gray-600 rounded-full border-gray-300 text-xl border-2 active:opacity-20 transition ">
                         <input name="myProperties" id="owning" value="owning" type="radio" class="hidden" checked>
                         <p>Owning</p>
                     </label>
-                    <label for="renting" class="cursor-pointer py-3 px-8 text-gray-600 rounded-full border-gray-300 text-xl border-2  has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:bg-blue-200 has-[:checked]:border-blue-300 active:opacity-20 transition ">
+                    <label for="renting" class="cursor-pointer py-3 px-8 text-gray-600 rounded-full border-gray-300 text-xl border-2  active:opacity-20 transition ">
                         <input name="myProperties" id="renting" value="renting" type="radio" class="hidden">
                         <p>Renting</p>
                     </label>
-                    <label for="forRent" class="cursor-pointer py-3 px-8 text-gray-600 rounded-full border-gray-300 text-xl border-2 has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:bg-blue-200 has-[:checked]:border-blue-300 active:opacity-20 transition ">
+                    <label for="forRent" class="cursor-pointer py-3 px-8 text-gray-600 rounded-full border-gray-300 text-xl border-2 active:opacity-20 transition ">
                         <input name="myProperties" id="forRent" value="forRent" type="radio" class="hidden">
                         <p>Leasing</p>
                     </label>
                 </fieldset>
 
-                <button class="flex items-center text-xl gap-2 py-3 px-8 font-bold border-2 border-blue-600 rounded-full bg-blue-600 text-white hover:bg-blue-700 active:opacity-20 transition">
+                <button id="addPropertyBtn" class="flex items-center text-xl gap-2 py-3 px-8 font-bold border-2 border-blue-600 rounded-full bg-blue-600 text-white hover:bg-blue-700 active:opacity-20 transition">
                     <i class="fas fa-plus"></i>
                     Add property
                 </button>
@@ -84,7 +86,7 @@
                                 <div class="mt-3 py-5 px-10 rounded text-gray-300 bg-gray-300"></div>
         
                                 <button class="mt-5 rounded text-xl w-full py-5 font-bold border-2 text-gray-300 bg-gray-300">
-                                   
+                                
                                 </button>
                             </div>
                         </div>
@@ -106,7 +108,7 @@
                                 <div class="mt-3 py-5 px-10 rounded text-gray-300 bg-gray-300"></div>
         
                                 <button class="mt-5 rounded text-xl w-full py-5 font-bold border-2 text-gray-300 bg-gray-300">
-                                   
+                                
                                 </button>
                             </div>
                         </div>
@@ -128,7 +130,7 @@
                                 <div class="mt-3 py-5 px-10 rounded text-gray-300 bg-gray-300"></div>
         
                                 <button class="mt-5 rounded text-xl w-full py-5 font-bold border-2 text-gray-300 bg-gray-300 border-gray-300">
-                                   
+                                
                                 </button>
                             </div>
                         </div>
@@ -187,7 +189,112 @@
             </div>
 
         </div>
-        
+        <div id="addPropertyForm" class="transform transition-transform rounded-lg absolute flex z-50 items-center justify-center formshadow"> <!---->
+            <div class="bg-white rounded-lg p-8 md:w-1/2 lg:w-2/5 relative">
+                <div class="content flex justify-between mb-4">
+                    <h2 class="text-5xl font-bold mb-6 text-center">Property <span class="text-blue-600">Details</span></h2>
+                    <span class="close-btn text-5xl text-blue-600 font-bold cursor-pointer top-4">&times;</span>
+                </div>
+                <form id="property-details-form" enctype="multipart/form-data" method="POST" action="" class="">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-gray-700">Property Name</label>
+                            <input type="text" id="name" class="mt-2 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="name-alert">Please enter the property name.</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="street" class=" text-sm font-medium">Street</label>
+                            <input type="text" id="street" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="street-alert">Please enter the street.</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="city" class=" text-sm font-medium">City</label>
+                            <input type="text" id="city" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="city-alert">Please enter the city.</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="state" class=" text-sm font-medium">State</label>
+                            <input type="text" id="state" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="state-alert">Please enter the state.</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="area" class=" text-sm font-medium">Area (sq ft)</label>
+                            <input type="number" id="area" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="area-alert">Please enter a valid area.</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="number-floors" class=" text-sm font-medium">Number of Floors</label>
+                            <input type="number" id="number-floors" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="floors-alert">Please enter a valid number of floors.</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="number-bedrooms" class=" text-sm font-medium">Number of Bedrooms</label>
+                            <input type="number" id="number-bedrooms" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="bedrooms-alert">Please enter a valid number of bedrooms.</p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="number-bathrooms" class=" text-sm font-medium">Number of Bathrooms</label>
+                            <input type="number" id="number-bathrooms" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <p class="text-pink-600 text-sm hidden" id="bathrooms-alert">Please enter a valid number of bathrooms.</p>
+                        </div>
+                        <div class="mb-4 flex items-center">
+                            <input type="checkbox" id="has-yard" class="ml-5">
+                            <label for="has-yard" class=" text-sm font-medium ms-7">&nbsp;&nbsp;Has Yard</label>
+                        </div>
+                        
+                        <div class="mb-4 col-span-2">
+                            <label for="description" class=" text-sm font-medium">Description</label>
+                            <textarea id="description" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition"></textarea>
+                            <p class="text-pink-600 text-sm hidden" id="description-alert">Please enter a description.</p>
+                        </div>
+                    </div>
+    
+                    <!-- Upload Property Image -->
+                    <div id="imageUploadContainer">
+                        <div class="upload-section">
+                            <label for="image-upload-1" class=" text-sm font-medium">Upload Image</label>
+                            <input type="file" id="image-upload-1" name="images[]" accept="image/*" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <button type="button" class="deleteImage px-2 py-1 bg-red-500 text-white rounded mt-2">x</button>
+                        </div>
+                    </div>
+                    <button type="button" id="more" class="px-4 py-2 bg-blue-500 text-white rounded">More</button>
+    
+                    <div class="mb-4">
+                        <label for="amenities" class="block font-medium text-lg mb-4 text-gray-700 has[:checked]:bg-indigo-50 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200">Amenities</label>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="checkbox-button has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:border-blue-300 active:opacity-20 transition px-4 py-2 border border-gray-300 rounded cursor-pointer">
+                                <input type="checkbox" id="amenities-school" class="peer hidden">
+                                <span class="">Near School</span>
+                            </label>
+                            <label class="checkbox-button has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:border-blue-300 active:opacity-20 transition px-4 py-2 border">
+                                <input type="checkbox" id="amenities-supermarket" class="peer hidden">
+                                <span class="active:opacity-20 transition  border-gray-300 rounded cursor-pointer">Near Supermarket</span>
+                            </label>
+                            <label class="checkbox-button has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:border-blue-300 active:opacity-20 transition px-4 py-2 border">
+                                <input type="checkbox" id="amenities-airport" class="peer hidden">
+                                <span class="active:opacity-20 transition  border-gray-300 rounded cursor-pointer">Near Airport</span>
+                            </label>
+                            <label class="checkbox-button has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:border-blue-300 active:opacity-20 transition px-4 py-2 border">
+                                <input type="checkbox" id="amenities-stadium" class="peer hidden">
+                                <span class="active:opacity-20 transition  border-gray-300 rounded cursor-pointer">Near Stadium</span>
+                            </label>
+                            <label class="checkbox-button has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:border-blue-300 active:opacity-20 transition px-4 py-2 border">
+                                <input type="checkbox" id="amenities-theater" class="peer hidden">
+                                <span class="active:opacity-20 transition  border-gray-300 rounded cursor-pointer">Near Movie Theater</span>
+                            </label>
+                            <label class="checkbox-button has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:border-blue-300 active:opacity-20 transition px-4 py-2 border">
+                                <input type="checkbox" id="amenities-central" class="peer hidden">
+                                <span class="active:opacity-20 transition  border-gray-300 rounded cursor-pointer">Near Central</span>
+                            </label>
+                        </div>
+                    </div>
+    
+                    <div class="mt-6 text-center">
+                        <button id="property-submit" type="submit" class=" py-2 px-10 bg-white border rounded-md border-blue-600 text-blue-600 hover:border-white hover:text-white hover:bg-blue-600 shadow-lg hover:shadow-2xl transition">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
     
 </body>
