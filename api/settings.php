@@ -3,7 +3,7 @@
 
     $conn = new mysqli(DB_HOST, DB_USERNAME, DB_PWD, DB_NAME);
 
-    if ($conn->connect_errno){
+    if ($conn->connect_error){
         echo "<p>Database connection failure.</p>";
         exit();
     }

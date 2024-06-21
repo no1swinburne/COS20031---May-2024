@@ -31,7 +31,7 @@
     
         $getProperties = $conn->query($sql);
     }
-   
+
 
     $propertiesList = array();
 

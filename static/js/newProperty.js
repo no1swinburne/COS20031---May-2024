@@ -154,9 +154,26 @@ function initForm() {
                 return;
             }
 
-            // AJAX API call would go here
-            // Nice one an 
-            // - hieu
+            $.ajax({
+                url: 'handleNewPeoperty.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.message === 'Property added successfully') {
+                        modifyGeneralAlertMessage("show", "form-alert", response.message, "success");
+                        fetchProperties();
+                        closeForm();
+                    } else {
+                        modifyGeneralAlertMessage("show", "form-alert", response.message, "error");
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                    modifyGeneralAlertMessage("show", "form-alert", "An error occurred. Please try again.", "error");
+                }
+            });
         });
     }
 }
@@ -195,62 +212,3 @@ function handleDisplayForm() {
     closeBtn.addEventListener("click", closeForm);
 }
 
-
-// Display Data from form
-document.addEventListener("DOMContentLoaded", function() {
-    loadProperties();
-
-    document.getElementById("properties-list-try-again").addEventListener("click", function() {
-        loadProperties();
-    });
-});
-
-function loadProperties() {
-    const propertiesList = document.getElementById("properties-list");
-    const propertiesLoading = document.getElementById("properties-loading-skeleton");
-    const propertiesNotFound = document.getElementById("properties-not-found");
-    const propertiesError = document.getElementById("properties-error");
-
-    propertiesLoading.classList.remove("hidden");
-    propertiesList.classList.add("hidden");
-    propertiesNotFound.classList.add("hidden");
-    propertiesError.classList.add("hidden");
-
-    fetch('../api/myProperties/displayNewProperty.php')
-        .then(response => response.json())
-        .then(data => {
-            propertiesLoading.classList.add("hidden");
-
-            if (data.code === 200) {
-                if (data.properties.length > 0) {
-                    propertiesList.innerHTML = data.properties.map(property => `
-                        <div class="bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
-                            <img src="${property.image_url}" alt="Property Image" class="w-full h-30 max-h-52 object-cover object-center rounded-t-lg mb-3">
-
-                            <div class="px-4 pb-4">
-                                <div class="flex justify-between items-center mb-2">
-                                    <div class="text text-left py-1 px-3 rounded-full bg-red-200 text-red-500 w-max">${property.status}</div>
-                                </div>
-                                
-                                <h3 class="text-2xl font-bold text-left">${property.name}</h3>
-                                <p class="text-gray-600 text-left mt-2">${property.description}</p>
-
-                                <a class="py-2 text-xl font-bold border-2 border-blue-600 w-full mt-3 rounded-lg bg-white text-blue-600 hover:bg-blue-600 hover:text-white active:opacity-20 transition">
-                                    View details
-                                </a>
-                            </div>
-                        </div>
-                    `).join('');
-                    propertiesList.classList.remove("hidden");
-                } else {
-                    propertiesNotFound.classList.remove("hidden");
-                }
-            } else {
-                propertiesError.classList.remove("hidden");
-            }
-        })
-        .catch(() => {
-            propertiesLoading.classList.add("hidden");
-            propertiesError.classList.remove("hidden");
-        });
-}

@@ -5,7 +5,12 @@
 
     $responseData = array(
         'code' => 200,
-        'description' => 'User are logged in',
+        'description' => 'User is logged in',
+        'user' => array(
+            'id' => $_SESSION['partyId'],
+            'name' => $_SESSION['name'],
+            'username' => $_SESSION['username'],
+        ),
     );
 
     http_response_code(200);
