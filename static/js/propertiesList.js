@@ -46,13 +46,14 @@ async function getPropertiesList() {
         
         const response = await getPropertiesRequest.json();
 
-        if(response.propertiesCount == 0) {
+        if(response.propertiesCount == 0 && offset == 0) {
             removeClass(notFound, "hidden");
             addClass(loadingSkeleton, "hidden");
         }
         else {
             removeClass(propertiesListCard, "hidden");
             addClass(loadingSkeleton, "hidden");
+            addClass(notFound, "hidden");
         }
 
 

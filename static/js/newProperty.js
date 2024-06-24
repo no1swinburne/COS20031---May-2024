@@ -16,22 +16,30 @@ function modifyAlertMessage(status, input, message) {
 function modifyGeneralAlertMessage(status, alertId, message, code = "error") {
     let alertElement = document.getElementById(alertId);
 
-    removeClass(alertElement, "bg-red-100", "text-red-700", "bg-green-100", "text-green-700");
+    console.log(`Alert ID: ${alertId}`);
+    console.log(`Alert Element:`, alertElement);
 
-    if (code === "error") {
-        addClass(alertElement, "bg-red-100", "text-red-700");
-        alertElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>${message}</span>`;
-    } else if (code === "success") {
-        addClass(alertElement, "bg-green-100", "text-green-700");
-        alertElement.innerHTML = `<i class="fas fa-check"></i><span>${message}</span>`;
-    }
+    if (alertElement) {
+        removeClass(alertElement, "bg-red-100", "text-red-700", "bg-green-100", "text-green-700");
 
-    if (status === "show") {
-        removeClass(alertElement, "hidden");
+        if (code === "error") {
+            addClass(alertElement, "bg-red-100", "text-red-700");
+            alertElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>${message}</span>`;
+        } else if (code === "success") {
+            addClass(alertElement, "bg-green-100", "text-green-700");
+            alertElement.innerHTML = `<i class="fas fa-check"></i><span>${message}</span>`;
+        }
+
+        if (status === "show") {
+            removeClass(alertElement, "hidden");
+        } else {
+            addClass(alertElement, "hidden");
+        }
     } else {
-        addClass(alertElement, "hidden");
+        console.error(`Element with ID ${alertId} not found.`);
     }
 }
+
 
 function resetAllAlerts() {
     var textAlertsList = [...document.querySelectorAll(`[id*="-alert"]`)];
@@ -75,7 +83,10 @@ function validatePropertyDetails() {
     let bedroomsInput = document.getElementById('number-bedrooms');
     let bathroomsInput = document.getElementById('number-bathrooms');
     let descriptionInput = document.getElementById('description');
+    let imageInputs = document.getElementById('image-upload-1')
     let result = true;
+    const allowedMimeTypes = ['image/jpeg', 'image/png'];
+    const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
 
     if (nameInput.value.trim() === "") {
         addClass(nameInput, "border-pink-500", "text-pink-600", "ring-pink-500");
@@ -131,6 +142,9 @@ function validatePropertyDetails() {
         result = false;
     }
 
+
+    // MISSING MANY UPLOAD FILE VALIDATION
+
     return result;
 }
 
@@ -146,7 +160,7 @@ function initForm() {
             }
         };
 
-        propertyDetailsForm.addEventListener('submit', async function(event) {
+        propertyDetailsForm.addEventListener('submit', function(event) {
             event.preventDefault();
             resetAllAlerts();
 
@@ -154,23 +168,34 @@ function initForm() {
                 return;
             }
 
+            let formData = new FormData(propertyDetailsForm);
+
             $.ajax({
-                url: 'handleNewPeoperty.php',
                 type: 'POST',
+                url: '../api/myProperties/handleNewProperty.php',
                 data: formData,
-                processData: false,
                 contentType: false,
-                success: function(response) {
-                    if (response.message === 'Property added successfully') {
-                        modifyGeneralAlertMessage("show", "form-alert", response.message, "success");
-                        fetchProperties();
-                        closeForm();
+                processData: false,
+                success: function(result) {
+                    console.log(result);
+
+                    if (result.message === 'Property added successfully') {
+                        console.log(result.message);
+                        alert('IM WORKING');
+                        modifyGeneralAlertMessage("show", "form-alert", result.message, "success");
+                        fetchProperties(); 
+                        closeForm(); 
                     } else {
-                        modifyGeneralAlertMessage("show", "form-alert", response.message, "error");
+                        console.log(formData);
+                        console.log(result.message);
+                        alert('IM NOT WORKING');
+                        modifyGeneralAlertMessage("show", "form-alert", result.message, "error");
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
+                error: function(xhr, status, error) {
+                    console.log(formData);
+                    alert('IM DYINGGGG');
+                    console.error('Error parsing JSON response:', error);
                     modifyGeneralAlertMessage("show", "form-alert", "An error occurred. Please try again.", "error");
                 }
             });
@@ -181,6 +206,7 @@ function initForm() {
 // Initialize input change handlers
 function initPropertyDetailsInputChangeStatus() {
     let inputs = [
+        // PLEASE UPLOAD AT LEAST 1 IMAGE
         ['name', 'Please enter the property name.'],
         ['street', 'Please enter the street.'],
         ['city', 'Please enter the city.'],
@@ -189,7 +215,8 @@ function initPropertyDetailsInputChangeStatus() {
         ['number-floors', 'Please enter a valid number of floors.'],
         ['number-bedrooms', 'Please enter a valid number of bedrooms.'],
         ['number-bathrooms', 'Please enter a valid number of bathrooms.'],
-        ['description', 'Please enter a description.']
+        ['description', 'Please enter a description.'],
+        ['image-upload-1', 'Please upload at least 1 image']
     ];
 
     for (let i = 0; i < inputs.length; i++) {

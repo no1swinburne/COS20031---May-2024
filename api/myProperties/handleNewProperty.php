@@ -1,6 +1,5 @@
 <?php
     include("../settings.php");
-    session_start();
 
     header('Content-Type: application/json');
 
@@ -18,6 +17,7 @@
         return null;
     }
 
+    // EXAMPLE FUNCTION FOR VALIDATION OF FILES, ADD CODE TO CHECK FOR FILE SIZE
     $allowedMimeTypes = ['image/jpeg', 'image/png'];
 
     function validateUploadedFile($file, $allowedTypes) {
@@ -29,6 +29,12 @@
             $fileMimeType = mime_content_type($file['tmp_name']);
             if (!in_array($fileMimeType, $allowedTypes)) {
                 $fileErrors[] = 'Only JPEG and PNG files are allowed.';
+            }
+
+            // Check for file size (limit to 5MB)
+            $maxFileSize = 5 * 1024 * 1024;
+            if ($file['size'] > $maxFileSize) {
+                $fileErrors[] = 'File size should not exceed 5MB.';
             }
         }
     
@@ -61,15 +67,29 @@
         exit();
     }
 
-    if (isset($_FILES['image'])) {
-        $fileErrors = validateUploadedFile($_FILES['image'], $allowedMimeTypes);
-        if (!empty($fileErrors)) {
-            $detailErrors[] = array('input' => 'image', 'errorDescription' => $fileErrors[0]);
+    // THIS IS EXAMPLE, NEED LOOP TO GET EACH FILE AND VALIDATE FROM ARRAY _FILES
+    if (isset($_FILES['images'])) {
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+            $file = array(
+                'name' => $_FILES['images']['name'][$key],
+                'type' => $_FILES['images']['type'][$key],
+                'tmp_name' => $tmpName,
+                'error' => $_FILES['images']['error'][$key],
+                'size' => $_FILES['images']['size'][$key]
+            );
+
+            $fileErrors = validateUploadedFile($file, $allowedMimeTypes);
+            if (!empty($fileErrors)) {
+                $detailErrors[] = array('input' => 'images', 'errorDescription' => $fileErrors[0]);
+            }
         }
     } else {
-        $detailErrors[] = array('input' => 'image', 'errorDescription' => 'No file uploaded.');
+        $detailErrors[] = array('input' => 'images', 'errorDescription' => 'No files uploaded.');
     }
+    
+    error_log("Received form data: Name - $name, Street - $street, City - $city, State - $state, Area - $area, Floors - $numberOfFloors, Bedrooms - $numberOfBedrooms, Bathrooms - $numberOfBathrooms, Description - $description");
 
+    // DONT FORGET ABOUT FILE UPLOAD
     if ($name && $street && $city && $state && $area && $numberOfFloors && $numberOfBedrooms && $numberOfBathrooms && $description) {
         if(!preg_match("/^[a-zA-Z\s]+$/", $name)) {
             $detailErrors[] = array('input' => 'name', 'errorDescription' => 'Invalid name format.');
@@ -91,7 +111,8 @@
             $detailErrors[] = array('input' => 'number-bathrooms', 'errorDescription' => 'Invalid number of bathrooms.');
         }
 
-        if(empty($detailErrors)) {
+        if (empty($detailErrors) && !empty($_FILES['images']['tmp_name'])) {
+            error_log("Inside if statement: empty($detailErrors)");
             $query = "INSERT INTO properties (name, street, city, state, area, number_of_floors, number_of_bedrooms, number_of_bathrooms, description, has_yard, amenities) VALUES ('$name', '$street', '$city', '$state', '$area', '$numberOfFloors', '$numberOfBedrooms', '$numberOfBathrooms', '$description', '$hasYard', '" . json_encode($amenities) . "')";
             
             $addProperty = $conn->query($query);
@@ -99,7 +120,7 @@
             if($addProperty) {
                 $responseData = array(
                     'code' => 200,
-                    'description' => 'Property details have been submitted successfully.'
+                    'description' => 'Property added successfully.'
                 );
                 http_response_code(200);
             }
@@ -111,6 +132,9 @@
                 http_response_code(500);
             }
         } else {
+            if (empty($_FILES['images']['tmp_name'])) {
+                $detailErrors[] = array('input' => 'images', 'errorDescription' => 'Please upload at least one file.');
+            }
             $responseData = array(
                 'code' => 400,
                 'description' => 'There are validation errors.',
@@ -119,6 +143,8 @@
             http_response_code(400);
         }
     } else {
+        // PLEASE UPLOAD AT LEAST 1 FILE
+        error_log("Inside else statement: !empty($detailErrors)");
         if(empty($name)) {
             $detailErrors[] = array('input' => 'name', 'errorDescription' => 'Please enter the name.');
         }
