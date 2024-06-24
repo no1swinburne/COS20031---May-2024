@@ -12,13 +12,15 @@ html {
 }
 
 .transform {
-  top: -100%;
+  top: -150%;
   opacity: 0;
+  z-index: -1;
   transform: scale(1.25);
 }
 
 .transform-active {
   top: 25%;
+  z-index: 100;
   opacity: 1;
   transform: scale(1);
 }
@@ -26,4 +28,8 @@ html {
 .transition-transform {
   transition: top 200ms ease-in-out, opacity 200ms ease-in-out,
     transform 200ms ease-in-out;
+}
+
+.addPropertyBtn {
+  z-index: 100;
 }
