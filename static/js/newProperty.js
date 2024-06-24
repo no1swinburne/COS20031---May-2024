@@ -194,7 +194,7 @@ function initForm() {
 
             $.ajax({
                 type: 'POST',
-                url: '../api/myProperties/handleNewProperty.php',
+                url: './api/myProperties/handleNewProperty.php',
                 data: formData,
                 contentType: false,
                 processData: false,

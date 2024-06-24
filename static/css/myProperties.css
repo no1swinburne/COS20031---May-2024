@@ -33,3 +33,7 @@ html {
 .addPropertyBtn {
   z-index: 100;
 }
+
+.formshadow {
+  box-shadow: 5px 10px 8px 20px black;
+}
