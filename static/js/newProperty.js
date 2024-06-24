@@ -171,7 +171,7 @@ function validatePropertyDetails() {
 }
 
 // Initialize form handlers
-function initForm() {
+async function initForm() {
     console.log("init...")
     let propertyDetailsForm = document.getElementById("property-details-form");
 
@@ -182,7 +182,7 @@ function initForm() {
             }
         };
 
-        propertyDetailsForm.addEventListener('submit', function(event) {
+        propertyDetailsForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             resetAllAlerts();
 
@@ -192,35 +192,28 @@ function initForm() {
 
             let formData = new FormData(propertyDetailsForm);
 
-            $.ajax({
-                type: 'POST',
-                url: './api/myProperties/handleNewProperty.php',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(result) {
-                    console.log(result);
-
-                    if (result.message === 'Property added successfully') {
-                        console.log(result.message);
-                        alert('IM WORKING');
-                        modifyGeneralAlertMessage("show", "form-alert", result.message, "success");
-                        fetchProperties(); 
-                        closeForm(); 
-                    } else {
-                        console.log(formData);
-                        console.log(result.message);
-                        alert('IM NOT WORKING');
-                        modifyGeneralAlertMessage("show", "form-alert", result.message, "error");
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.log(formData);
-                    alert('IM DYINGGGG');
-                    console.error('Error parsing JSON response:', error);
-                    modifyGeneralAlertMessage("show", "form-alert", "An error occurred. Please try again.", "error");
+            try {
+                const loginRequest = await fetch("../api/myProperties/handleNewProperty.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                
+                const response = await loginRequest.json();
+                
+                if(response.code == 200) {
+                    offset = 0
+                    getPropertiesList();
+                    closeForm();
                 }
-            });
+                else {
+                    modifyGeneralAlertMessage("show", "form-alert", response.description, "error");
+                }
+
+            } catch (error) {
+                modifyGeneralAlertMessage("show", "form-alert", "Something went wrong. Please try again later")
+            }
+            finally {
+            }
         });
     }
 }

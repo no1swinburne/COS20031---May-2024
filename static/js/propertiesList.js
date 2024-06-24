@@ -56,7 +56,6 @@ async function getPropertiesList() {
             addClass(notFound, "hidden");
         }
 
-
         let propertiesList = response.propertiesList;
         let propertiesHTML = "";
 

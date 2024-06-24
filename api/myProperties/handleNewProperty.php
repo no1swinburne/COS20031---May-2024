@@ -1,7 +1,22 @@
 <?php
     include("../settings.php");
-
+    include("../authentication/checkSessionforAPI.php");
+    include("../s3Constants.php");
     header('Content-Type: application/json');
+    require '../../vendor/autoload.php';
+
+    use Aws\S3\S3Client;
+    use Aws\Exception\AwsException;
+
+    // Create an S3 client
+    $s3 = new S3Client([
+        'version' => S3_VERSION,
+        'region'  => S3_REGION,
+        'credentials' => [
+            'key' => IAM_ACCESS_KEY_ID,
+            'secret' => IAM_SECRET_ACCESS_KEY_ID,
+        ]
+    ]);
 
     function sanitizeInput($input, $conn) {
         if (isset($_POST[$input])) {
@@ -67,7 +82,6 @@
         exit();
     }
 
-    // THIS IS EXAMPLE, NEED LOOP TO GET EACH FILE AND VALIDATE FROM ARRAY _FILES
     if (isset($_FILES['images'])) {
         foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
             $file = array(
@@ -112,23 +126,65 @@
         }
 
         if (empty($detailErrors) && !empty($_FILES['images']['tmp_name'])) {
-            error_log("Inside if statement: empty($detailErrors)");
-            $query = "INSERT INTO properties (name, street, city, state, area, number_of_floors, number_of_bedrooms, number_of_bathrooms, description, has_yard, amenities) VALUES ('$name', '$street', '$city', '$state', '$area', '$numberOfFloors', '$numberOfBedrooms', '$numberOfBathrooms', '$description', '$hasYard', '" . json_encode($amenities) . "')";
-            
-            $addProperty = $conn->query($query);
+            $queryErrors = "";
+            mysqli_begin_transaction($conn);
 
-            if($addProperty) {
+            try {
+                $firstQuery = "INSERT INTO addresses (street, city, state) VALUES ('$street', '$city', '$state')";
+                $addAddress = $conn->query($firstQuery);
+
+                if (!$addAddress) {
+                    throw new Exception("Cannot add address");
+                }
+
+                $address_id = mysqli_insert_id($conn);
+                $owner_id = $_SESSION["partyId"];
+                $amenitiesJson = mysqli_real_escape_string($conn, json_encode($amenities));
+                $secondQuery = "INSERT INTO properties (name, area, number_floors, number_bedrooms, number_bathrooms, has_yard, description, amenities, owner_id, address_id) VALUES ('$name', '$area', '$numberOfFloors', '$numberOfBedrooms', '$numberOfBathrooms', '$hasYard', '$description', '$amenitiesJson', '$owner_id', '$address_id')";
+                $addProperty = $conn->query($secondQuery);
+
+                if (!$addProperty) {
+                    throw new Exception("Cannot add property");
+                }
+
+
+                $property_id = mysqli_insert_id($conn);
+                foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
+                    try {
+                        $result = $s3->putObject([
+                            'Bucket' => S3_BUCKET,
+                            'Key'    => basename($_FILES['images']['name'][$key]),
+                            'SourceFile' => $tmpName,
+                            'ACL'    => 'public-read'
+                        ]);
+
+                        $imageUrl = $result['ObjectURL'];
+                        $imgQuery = "INSERT INTO images (property_id, image_url) VALUES ('$property_id', '$imageUrl')";
+                        $addImg = $conn->query($imgQuery);
+                        
+                        if (!$addImg) {
+                            throw new Exception("Cannot add image to database");
+                        }
+                    } catch (AwsException $e) {
+                        throw new Exception("Cannot upload image to S3: " . $e->getMessage());
+                    }
+                }
+                mysqli_commit($conn);
                 $responseData = array(
                     'code' => 200,
                     'description' => 'Property added successfully.'
                 );
+
                 http_response_code(200);
-            }
-            else {
+            } catch (Exception $e) {
+                mysqli_rollback($conn);
+                error_log($e->getMessage());
+
                 $responseData = array(
                     'code' => 500,
-                    'description' => 'Something went wrong. Please try again later.'
+                    'description' => 'Something went wrong. Please try again later.' . $e
                 );
+
                 http_response_code(500);
             }
         } else {
@@ -144,7 +200,6 @@
         }
     } else {
         // PLEASE UPLOAD AT LEAST 1 FILE
-        error_log("Inside else statement: !empty($detailErrors)");
         if(empty($name)) {
             $detailErrors[] = array('input' => 'name', 'errorDescription' => 'Please enter the name.');
         }
