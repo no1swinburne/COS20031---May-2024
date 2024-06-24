@@ -83,8 +83,9 @@ function validatePropertyDetails() {
     let bedroomsInput = document.getElementById('number-bedrooms');
     let bathroomsInput = document.getElementById('number-bathrooms');
     let descriptionInput = document.getElementById('description');
-    let imageInputs = document.getElementById('image-upload-1')
+    let imageInputs = Array.from(document.querySelectorAll('input[type="file"]'));
     let result = true;
+
     const allowedMimeTypes = ['image/jpeg', 'image/png'];
     const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
 
@@ -142,7 +143,28 @@ function validatePropertyDetails() {
         result = false;
     }
 
+    imageInputs.forEach((imageInput, index) => {
+        let files = imageInput.files;
+        if (files.length === 0) {
+            addClass(imageInput, "border-pink-500", "text-pink-600", "ring-pink-500");
+            modifyAlertMessage("show", imageInput, `Please upload at least one file for image ${index + 1}.`);
+            result = false;
+        } else {
+            for (let file of files) {
+                if (!allowedMimeTypes.includes(file.type)) {
+                    addClass(imageInput, "border-pink-500", "text-pink-600", "ring-pink-500");
+                    modifyAlertMessage("show", imageInput, `Invalid file type for image ${index + 1}. Only JPEG and PNG files are allowed.`);
+                    result = false;
+                }
 
+                if (file.size > maxFileSize) {
+                    addClass(imageInput, "border-pink-500", "text-pink-600", "ring-pink-500");
+                    modifyAlertMessage("show", imageInput, `File size for image ${index + 1} should not exceed 5MB.`);
+                    result = false;
+                }
+            }
+        }
+    });
     // MISSING MANY UPLOAD FILE VALIDATION
 
     return result;

@@ -1,6 +1,6 @@
 <?php
     require_once("../settings.php");
-    require_once("../authentication/checkSessionforAPI.php");
+    include("../authentication/checkSessionforAPI.php");
 
     $partyId = $_SESSION['partyId'];
 

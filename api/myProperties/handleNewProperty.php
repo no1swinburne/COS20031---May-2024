@@ -173,6 +173,10 @@
             $detailErrors[] = array('input' => 'description', 'errorDescription' => 'Please enter the description.');
         }
 
+        if (empty($_FILES['images']['tmp_name'])) {
+            $detailErrors[] = array('input' => 'images', 'errorDescription' => 'Please upload at least one file.');
+        }
+        
         $responseData = array(
             'code' => 400,
             'description' => 'There are validation errors.',
