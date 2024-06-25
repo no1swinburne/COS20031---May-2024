@@ -18,7 +18,7 @@
 <body >
     <!-- Header -->
     <header class="relative w-full">
-        <div class="w-40 absolute mt-3 top-0 left-1/2 -ml-24 lg:-ml-40">
+        <div class="w-52 absolute mt-3 top-0 left-1/2 -ml-24 lg:-ml-40">
             <a href="index.html"><img src="../static/images/kyanon-logo-blue.png" alt="Kyanon Logo"></a>
         </div>
         <div class="mx-auto bg-white">
@@ -48,7 +48,7 @@
         <div id="main" class="w-3/4">
             <h1 class="text-5xl font-black">my<span class="text-blue-600">Properties</span></h1>
 
-            <div class="flex mt-8 items-center justify-between">
+            <div class="flex flex-row lg:flex-col mt-8 items-center justify-between">
                 <fieldset class="flex gap-4">
                     <label for="owning" class="cursor-pointer py-3 px-8 text-gray-600 rounded-full border-gray-300 text-xl border-2 has-[:checked]:text-blue-600 has-[:checked]:font-bold has-[:checked]:bg-blue-200 has-[:checked]:border-blue-300 active:opacity-20 focus:bg-blue-600 transition ">
                         <input name="myProperties" id="owning" value="owning" type="radio" class="hidden" checked>
@@ -73,7 +73,7 @@
             <div id="properties-loading-skeleton" class="rounded gap-3 mt-10 h-full">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 ">
                     <!-- Loading Property Card -->
-                    <div class="bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
+                    <div class="z-30 bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
 
                         <div class="animate-pulse">
                             <div class="w-full h-52 text-gray-300 bg-gray-300 rounded-t-lg mb-3"></div>
@@ -95,7 +95,7 @@
                     </div>
 
                     <!-- Loading Property Card -->
-                    <div class="bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
+                    <div class="z-30 bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
 
                         <div class="animate-pulse delay-150">
                             <div class="w-full h-52 text-gray-300 bg-gray-300 rounded-t-lg mb-3"></div>
@@ -117,7 +117,7 @@
                     </div>
 
                     <!-- Loading Property Card -->
-                    <div class="bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
+                    <div class="z-30 bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
 
                         <div class="animate-pulse delay-300">
                             <div class="w-full h-52 text-gray-300 bg-gray-300 rounded-t-lg mb-3"></div>
@@ -162,7 +162,7 @@
             <div id="properties-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 hidden">
                 
                 <!-- Property Card -->
-                <div class="bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
+                <div class="z-30 bg-white border-gray-300 border-2 rounded-lg shadow-lg hover:shadow-2xl transition">
                     <img src="https://cos20031-chelseano1.s3.amazonaws.com/2527.jpg" alt="Property Image" class="w-full h-30 max-h-52 object-cover object-center rounded-t-lg mb-3">
 
                     <div class="px-4 pb-4">
@@ -182,7 +182,7 @@
 
             </div>
 
-            <div id="properties-list-see-more" class="mt-10 flex justify-center hidden">
+            <div id="properties-list-see-more" class="z-30 mt-10 flex justify-center hidden">
                 <button id="properties-list-see-more-btn" class="flex items-center justify-center gap-3 font-bold text-left py-3 px-10 rounded-full border-2 border-blue-600 bg-white text-blue-600 hover:bg-blue-600 hover:text-white active:bg-blue-700 active:text-white active:opacity-20 disabled:border-blue-300 disabled:text-blue-500 transition w-ma">
                     <i class="fas fa-angle-down"></i>
                     See more
@@ -191,7 +191,7 @@
 
         </div>
         <div id="addPropertyForm" class="border-black transform transition-transform rounded-lg absolute flex z-40 items-center justify-center formshadow">
-            <div class="bg-white rounded-lg p-8 md:w-1/4 lg:w-1/6 relative">
+            <div class="bg-white rounded-lg p-8 w-1/6 relative">
                 <div class="content flex justify-between mb-4">
                     <h2 class="text-5xl font-bold mb-6 text-center">Property <span class="text-blue-600">Details</span></h2>
                     <span class="close-btn text-5xl text-blue-600 font-bold cursor-pointer top-4">&times;</span>
@@ -220,30 +220,43 @@
                         </div>
                         <div class="mb-4">
                             <label for="area" class=" text-sm font-medium">Area (sq ft)</label>
-                            <input type="number" id="area" name="area" value="area" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <input type="number" id="area" name="area" value="area" class="appearance-none mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
                             <p class="text-pink-600 text-sm hidden" id="area-alert">Please enter a valid area.</p>
                         </div>
                         <div class="mb-4">
                             <label for="number-floors" class=" text-sm font-medium">Number of Floors</label>
-                            <input type="number" id="number-floors" name="number-floors" value="number-floors" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <input type="number" id="number-floors" name="number-floors" value="number-floors" class="appearance-none mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
                             <p class="text-pink-600 text-sm hidden" id="floors-alert">Please enter a valid number of floors.</p>
                         </div>
                         <div class="mb-4">
                             <label for="number-bedrooms" class=" text-sm font-medium">Number of Bedrooms</label>
-                            <input type="number" id="number-bedrooms" name="number-bedrooms" value="number-bedrooms" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <input type="number" id="number-bedrooms" name="number-bedrooms" value="number-bedrooms" class="appearance-none mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
                             <p class="text-pink-600 text-sm hidden" id="bedrooms-alert">Please enter a valid number of bedrooms.</p>
                         </div>
                         <div class="mb-4">
                             <label for="number-bathrooms" class=" text-sm font-medium">Number of Bathrooms</label>
-                            <input type="number" id="number-bathrooms" name="number-bathrooms" value="number-bathrooms" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                            <input type="number" id="number-bathrooms" name="number-bathrooms" value="number-bathrooms" class="appearance-none mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
                             <p class="text-pink-600 text-sm hidden" id="bathrooms-alert">Please enter a valid number of bathrooms.</p>
                         </div>
-                        <div class="mb-4 flex items-center">
-                            <input type="checkbox" id="has-yard" class="ml-5">
-                            <label for="has-yard" class=" text-sm font-medium ms-7">&nbsp;&nbsp;Has Yard</label>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="mb-4">
+                            <div>
+                                <label for="has-yard" class="text-sm font-medium">Does the property come with a yard?</label>
+                            </div>
+                            <div>
+                                <label class="mt-4 mr-4">
+                                    <input type="radio" id="has-yard-yes" name="has-yard" value="yes">
+                                    Yes
+                                </label>
+                                <label>
+                                    <input type="radio" id="has-yard-no" name="has-yard" value="no">
+                                    No
+                                </label>
+                            </div>
                         </div>
                         
-                        <div class="mb-4 col-span-2">
+                        <div class="mb-4">
                             <label for="description" class=" text-sm font-medium">Description</label>
                             <textarea id="description" name="description" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition"></textarea>
                             <p class="text-pink-600 text-sm hidden" id="description-alert">Please enter a description.</p>
@@ -253,13 +266,15 @@
                     <!-- Upload Property Image -->
                     <div id="imageUploadContainer">
                         <div class="upload-section">
-                            <label for="image-upload-1" class=" text-sm font-medium">Upload Image</label>
-                            <input type="file" id="image-upload-1" name="images[]" accept="image/*" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
-                            <button type="button" class="deleteImage px-2 py-1 bg-red-500 text-white rounded mt-2">x</button>
-                                    <p class="text-pink-600 text-sm hidden" id="image-alert">Please upload an image.</p>
+                            <label for="image-upload-1" class="text-sm font-medium">Upload Image</label>
+                            <div class="flex">
+                                <input type="file" id="image-upload-1" name="images[]" accept="image/*" class="mt-1 block w-full px-3 py-2 bg-white border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+                                <button type="button" class="deleteImage px-2 py-1 bg-red-500 text-black rounded mt-2 hidden">×</button>
+                                </div>
+                            <p class="text-pink-600 text-sm hidden" id="image-alert">Please upload an image.</p>
                         </div>
                     </div>
-                    <button type="button" id="more" class="px-4 py-2 bg-blue-500 text-white rounded">More</button>
+                    <button type="button" id="more" class="px-4 py-2 bg-blue-500 rounded underline text-blue-500">+ Add another file</button>
     
                     <div class="mb-4">
                         <label for="amenities" class="block font-medium text-lg mb-4 text-gray-700 has[:checked]:bg-indigo-50 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-200">Amenities</label>

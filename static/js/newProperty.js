@@ -1,3 +1,80 @@
+function handleMultipleImageUpload() {
+    document.getElementById('more').addEventListener('click', function() {
+        const imageUploadContainer = document.getElementById('imageUploadContainer');
+        const uploadSection = document.createElement('div');
+        uploadSection.classList.add('upload-section');
+
+        uploadSection.innerHTML = `
+        <div class="flex">
+            <input type="file" id="image-upload-1" name="images[]" accept="image/*" class="mt-1 block w-full px-3 py-2 bg-white border-gray-300 rounded-md focus:border-blue-600 focus:text-blue-600 focus:outline-none disabled:bg-gray-300 transition">
+            <button type="button" class="deleteImage px-2 py-1 bg-red-500 text-black rounded mt-2">×</button>
+            </div>
+        <p class="text-pink-600 text-sm hidden" id="image-alert">Please upload an image.</p>
+        `;
+        
+        const imageInputCount = imageUploadContainer.querySelectorAll('.upload-section').length + 1;
+
+        imageUploadContainer.appendChild(uploadSection);
+        
+        const deleteButton = uploadSection.querySelector('.deleteImage');
+        if (imageInputCount > 1) {
+            deleteButton.classList.remove('hidden');
+        } else {
+            deleteButton.classList.add('hidden');
+        }   
+
+        uploadSection.querySelector('.deleteImage').addEventListener('click', function() {
+            imageUploadContainer.removeChild(uploadSection);
+        });
+    });
+}
+
+function formValidation() {
+    document.getElementById('property-details-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+    
+        const form = event.target;
+        const formData = new FormData(form);
+    
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+            });
+    
+            const result = await response.json();
+    
+            document.querySelectorAll('.text-pink-600').forEach(function(errorElement) {
+                errorElement.classList.add('hidden');
+                errorElement.previousElementSibling.classList.remove('border-pink-600');
+            });
+    
+            if (response.ok) {
+    
+                alert('Form submitted successfully!');
+                form.reset(); 
+            } else {
+    
+                Object.keys(result.errors).forEach(function(key) {
+                    const errorElement = document.getElementById(`${key}-alert`);
+                    const inputElement = document.getElementById(key);
+    
+                    if (errorElement) {
+                        errorElement.textContent = result.errors[key];
+                        errorElement.classList.remove('hidden');
+                    }
+    
+                    if (inputElement) {
+                        inputElement.classList.add('border-pink-600');
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    });
+}
+
 // Functions to handle alert messages
 function modifyAlertMessage(status, input, message) {
     let alertElement = input.nextElementSibling;
@@ -147,19 +224,19 @@ function validatePropertyDetails() {
         let files = imageInput.files;
         if (files.length === 0) {
             addClass(imageInput, "border-pink-500", "text-pink-600", "ring-pink-500");
-            modifyAlertMessage("show", imageInput, `Please upload at least one file for image ${index + 1}.`);
+            modifyAlertMessage("show", imageInput, `Please upload at least one file.`);
             result = false;
         } else {
             for (let file of files) {
                 if (!allowedMimeTypes.includes(file.type)) {
                     addClass(imageInput, "border-pink-500", "text-pink-600", "ring-pink-500");
-                    modifyAlertMessage("show", imageInput, `Invalid file type for image ${index + 1}. Only JPEG and PNG files are allowed.`);
+                    modifyAlertMessage("show", imageInput, `Invalid file type. Only JPEG and PNG files are allowed.`);
                     result = false;
                 }
 
                 if (file.size > maxFileSize) {
                     addClass(imageInput, "border-pink-500", "text-pink-600", "ring-pink-500");
-                    modifyAlertMessage("show", imageInput, `File size for image ${index + 1} should not exceed 5MB.`);
+                    modifyAlertMessage("show", imageInput, `File size should not exceed 5MB.`);
                     result = false;
                 }
             }
@@ -183,6 +260,19 @@ async function initForm() {
         };
 
         propertyDetailsForm.addEventListener('submit', async function(event) {
+
+            // Disable form activity on submit
+            document.getElementById('name').readOnly = true;
+            document.getElementById('street').readOnly = true;
+            document.getElementById('city').readOnly = true;
+            document.getElementById('state').readOnly = true;
+            document.getElementById('area').readOnly = true;
+            document.getElementById('number-floors').readOnly = true;
+            document.getElementById('number-bedrooms').readOnly = true;
+            document.getElementById('number-bathrooms').readOnly = true;
+            document.getElementById('has-yard').readOnly = true;
+            document.getElementById('description').readOnly = true;
+
             event.preventDefault();
             resetAllAlerts();
 

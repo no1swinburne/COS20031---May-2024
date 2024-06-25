@@ -12,6 +12,7 @@ function toggleRadioButtons(status) {
     });
 }
 
+
 async function getPropertiesList() {
 
     if(disabled) return;
@@ -115,10 +116,12 @@ window.onload = async function() {
     
     initPropertyDetailsInputChangeStatus();
     handleDisplayForm();
+    handleMultipleImageUpload()
 
     console.log("truong to init form");
 
     getPropertiesList();
+    formValidation();
 
     console.log("truong to get prop form");
 
@@ -148,7 +151,4 @@ window.onload = async function() {
             }
         })
     });
-
-    // loadProperties();
-    
 };
